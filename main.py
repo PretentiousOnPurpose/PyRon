@@ -6,6 +6,6 @@ Seq.add(3 , "relu")
 Seq.add(3 , "relu")
 Seq.add(3 , "relu")
 Seq.add(1 , "relu")
-Seq.compile()
+Seq.compile(loss="binary_cross_entropy" , optimiser= "sgd")
 Seq.describe()
 
