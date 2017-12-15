@@ -1,2 +1,2 @@
 # PyRon
-A Neural Network Library wriiten in Python.
+A Neural Network Library written in Python.
