@@ -1,5 +1,7 @@
-import layer as l
 import numpy as np
+
+from pyron import layer as l
+
 
 class Sequential:
     def __init__(self):
@@ -14,11 +16,11 @@ class Sequential:
 
     def predict(self, x):
         self.layers[0].input = x
-        self.layers[0].fire()
+        self.layers[0].Fire()
         self.layers[0].pushOutput()
         for i in range(len(self.layers) - 1):
             self.layers[i+1].setInput()
-            self.layers[i+1].fire()
+            self.layers[i+1].Fire()
             self.layers[i+1].pushOutput()
         return self.layers[-1].output
 
@@ -31,9 +33,8 @@ class Sequential:
                 n.weights = np.random.random(units)
 
     def train(self , x, y , rate , epochs):
-        for i in range(self.layers[0].input_dims):
-            for n in range(self.layers[0].neurons):
-                self.layers[0].neurons[n] = np.random.random(self.layers[0].input_dims)
+        for n in range(len(self.layers[0].neurons)):
+            self.layers[0].neurons[n].weights = np.random.random(self.layers[0].input_dims)
         for e in range(epochs):
             y_ = self.predict(x)
             err = y_ - y

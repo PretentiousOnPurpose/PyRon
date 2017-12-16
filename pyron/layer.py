@@ -1,4 +1,5 @@
-import neuron as nn
+from pyron import neuron as nn
+
 
 class Layer:
     def __init__(self, ID , units , actFn , model , input_dims , dropout):
@@ -19,9 +20,10 @@ class Layer:
             n.append(nn.Neuron(actFn , self))
         return n
 
-    def fire(self):
-        for n in range(len(self.neurons)):
-            self.neurons[n].fire()
+    def Fire(self):
+        for n in self.neurons:
+            print(n)
+            n.Fire()
 
     def setInput(self):
         self.model.layers[self.ID-1].pushOutput()
