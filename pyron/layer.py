@@ -25,16 +25,21 @@ class Layer:
             print(n)
             n.Fire()
 
-    def setInput(self):
-        self.model.layers[self.ID-1].pushOutput()
-        self.input_ = self.model.layers[self.ID-1].output
-        for n in self.neurons:
-            n.setInput(self.input_)
+    def setInput(self , x=[]):
+        if x != []:
+            self.input_ = x
+            for n in self.neurons:
+                n.setInput(self.input_)
+        else:
+            self.model.layers[self.ID - 1].pushOutput()
+            self.input_ = self.model.layers[self.ID - 1].output
+            for n in self.neurons:
+                n.setInput(self.input_)
 
     def pushOutput(self):
         out = []
         for n in range(len(self.neurons)):
-            out.append(self.neurons[n].output)
+            out.append(self.neurons[n].fire)
         self.output = out
 
     def gatherDelta(self):

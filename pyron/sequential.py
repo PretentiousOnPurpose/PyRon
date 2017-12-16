@@ -15,7 +15,7 @@ class Sequential:
         self.ID += 1
 
     def predict(self, x):
-        self.layers[0].input = x
+        self.layers[0].setInput(x)
         self.layers[0].Fire()
         self.layers[0].pushOutput()
         for i in range(len(self.layers) - 1):
