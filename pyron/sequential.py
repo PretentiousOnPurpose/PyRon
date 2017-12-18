@@ -22,7 +22,11 @@ class Sequential:
             self.layers[i+1].setInput()
             self.layers[i+1].Fire()
             self.layers[i+1].pushOutput()
-        return self.layers[-1].output
+
+        print("Output: " , self.layers[-1].output)
+        # return self.layers[-1].output
+        return np.ones((len(x), 1))*0.54
+
 
     def compile(self, loss , optimiser):
         self.loss = loss
@@ -30,21 +34,23 @@ class Sequential:
         for l in range(1, len(self.layers)):
             units = self.layers[l-1].units
             for n in self.layers[l].neurons:
-                n.weights = np.random.random(units)
+                # n.weights = np.random.random(units)
+                n.weights = np.ones(units)
+
+    def test(self, x):
+        self.predict(x)
 
     def train(self , x, y , rate , epochs):
         for n in range(len(self.layers[0].neurons)):
-            self.layers[0].neurons[n].weights = np.random.random(self.layers[0].input_dims)
+            # self.layers[0].neurons[n].weights = np.random.random(self.layers[0].input_dims)
+            self.layers[0].neurons[n].weights = np.ones(self.layers[0].input_dims)
         for e in range(epochs):
             y_ = self.predict(x)
-            err = y_ - y
-            loss = -(y*np.log(y_) + (1 - y)*log(1 - y_))
+            print(len(y_))
+            err = y - y_
+            loss = self.getLoss(y , y_)
             print("Iter: " , e ," | Loss: " , loss)
-            self.optimise(x, y , err, rate)
-
-    def optimise(self,x ,y , err, rate):
-        for l in self.layers[1:]:
-            pass
+            self.backProp(err, rate)
 
     def backProp(self, err , rate):
         if self.optimiser == "sgd":
@@ -55,16 +61,28 @@ class Sequential:
                     n.weights = n.weights + delta*n.input_
                 self.layers[-1].gatherDelta()
 
-                for l in self.layers[-2: 0:-1]:
-                    for n in l.neurons:
-                        n.delta = np.dot(n.weights , self.layers[l.ID + 1].delta)
+                for la in self.layers[-2: 0:-1]:
+                    for n in la.neurons:
+                        n.delta = np.dot(n.weights , self.layers[la.ID + 1].delta)
                         n.weights = n.weights + n.delta*n.grad()*n.input_
-                    l.gatherDelta()
+                    la.gatherDelta()
 
             elif self.loss == "multi_cross_entropy":
                 pass
             elif self.loss == "mean_squared_error":
-                pass
+                for n in self.layers[-1].neurons:
+                    delta = rate*np.sum(err , axis= 1 ,keepdims=True)/len(err)
+                    n.delta = delta
+                    print(n.weights)
+                    print(n.input_)
+                    n.weights = n.weights + delta*n.input_
+                self.layers[-1].gatherDelta()
+
+                for la in self.layers[-2: 0:-1]:
+                    for n in la.neurons:
+                        n.delta = np.dot(n.weights , self.layers[la.ID + 1].delta)
+                        n.weights = n.weights + n.delta*n.grad()*n.input_
+                    la.gatherDelta()
 
         elif self.optimiser == "adam":
             pass
@@ -80,3 +98,11 @@ class Sequential:
         for l in self.layers[1:-1]:
             print("HL " , l.ID , ": Units: " , l.units , "| ActFn: " , l.actFn , " | Weights: " , l.neurons[0].weights.shape)
         print("Output Layer: ", "Units: ", self.layers[-1].units , "| ActFn: " , self.layers[-1].actFn , " | Weights: " , self.layers[-1].neurons[0].weights.shape)
+
+    def getLoss(self, true , pred):
+        if self.loss == "binary_cross_entropy":
+            return np.sum(np.sum(-(true*np.log(pred) + (1 - true)*np.log(1 - pred)) , axis=1 , keepdims=True)/len(true))
+        elif self.loss == "mean_squared_error":
+            return 1
+        elif self.loss == "multi_cross_entropy":
+            return 1

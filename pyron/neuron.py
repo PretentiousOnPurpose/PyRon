@@ -25,12 +25,11 @@ class Neuron:
         if self.state:
             pot = self.Pot()
             if self.actFn.lower() == "relu":
-                if pot.all() > 0:
-                    self.fire = pot
-                else:
-                    self.fire = [k if k > 0 else 0 for k in self.pot]
-            elif self.actFn.lower == "sigmoid":
+                self.fire = [k if k > 0 else 0 for k in pot]
+            elif self.actFn.lower() == "sigmoid":
                 self.fire = 1 / (1 + np.exp(-pot))
+            elif self.actFn.lower() == "linear":
+                self.fire = pot
         else:
             self.fire = np.zeros(len(self.input_))
         return self.fire

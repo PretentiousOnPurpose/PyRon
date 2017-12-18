@@ -1,5 +1,5 @@
 from pyron import neuron as nn
-
+import numpy as np
 
 class Layer:
     def __init__(self, ID , units , actFn , model , input_dims , dropout):
@@ -22,25 +22,22 @@ class Layer:
 
     def Fire(self):
         for n in self.neurons:
-            print(n)
             n.Fire()
 
-    def setInput(self , x=[]):
-        if x != []:
+    def setInput(self , x = []):
+        if len(x) != 0:
             self.input_ = x
-            for n in self.neurons:
-                n.setInput(self.input_)
         else:
             self.model.layers[self.ID - 1].pushOutput()
             self.input_ = self.model.layers[self.ID - 1].output
-            for n in self.neurons:
-                n.setInput(self.input_)
+        for n in self.neurons:
+            n.setInput(x)
 
     def pushOutput(self):
         out = []
         for n in range(len(self.neurons)):
             out.append(self.neurons[n].fire)
-        self.output = out
+        self.output = np.squeeze(out)
 
     def gatherDelta(self):
         return [n.delta for n in self.neurons]
