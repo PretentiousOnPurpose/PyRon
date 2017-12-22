@@ -25,13 +25,14 @@ class Layer:
             n.Fire()
 
     def setInput(self , x = []):
+        print("ID: " , self.ID)
         if len(x) != 0:
             self.input_ = x
-        else:
+        elif len(x) == 0:
             self.model.layers[self.ID - 1].pushOutput()
             self.input_ = self.model.layers[self.ID - 1].output
         for n in self.neurons:
-            n.setInput(x)
+            n.setInput(self.input_)
 
     def pushOutput(self):
         out = []
@@ -44,5 +45,4 @@ class Layer:
 
     def drop(self):
         pass
-
 

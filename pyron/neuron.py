@@ -16,8 +16,8 @@ class Neuron:
         self.input_ = x
 
     def Pot(self):
-        # print("Weight: ", self.weights)
-        # print("Input: ", self.input_)
+        print(self.input_)
+        print(self.weights)
         self.pot = (self.weights * self.input_) + self.bias
         return self.pot
 
