@@ -16,9 +16,9 @@ class Neuron:
         self.input_ = x
 
     def Pot(self):
-        print(self.input_)
-        print(self.weights)
-        self.pot = (self.weights * self.input_) + self.bias
+        # print(self.input_)
+        # print(self.weights)
+        self.pot = np.squeeze((self.weights * self.input_) + self.bias)
         return self.pot
 
     def Fire(self):
@@ -32,7 +32,7 @@ class Neuron:
                 self.fire = pot
         else:
             self.fire = np.zeros(len(self.input_))
-        return self.fire
+        return np.squeeze(self.fire)
 
     def sigmoid(self, x):
         return 1/(1 + np.exp(-x))

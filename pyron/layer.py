@@ -25,7 +25,6 @@ class Layer:
             n.Fire()
 
     def setInput(self , x = []):
-        print("ID: " , self.ID)
         if len(x) != 0:
             self.input_ = x
         elif len(x) == 0:

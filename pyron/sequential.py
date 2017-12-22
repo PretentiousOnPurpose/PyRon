@@ -36,7 +36,7 @@ class Sequential:
         self.layers[0].pushOutput()
 
         self.layers[1].setInput()
-        # self.layers[1].Fire()
+        self.layers[1].Fire()
         self.layers[1].pushOutput()
 
 
