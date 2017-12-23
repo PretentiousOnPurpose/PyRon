@@ -15,7 +15,10 @@ seq.add(1 , "relu")
 seq.compile(loss="mean_squared_error" , optimiser= "sgd")
 seq.feed(x)
 
-print(seq.layers[2].output)
+g = seq.layers[3].neurons[0].input_
+w = seq.layers[3].neurons[0].weights
+
+print(np.dot(g.T , w))
 
 
 

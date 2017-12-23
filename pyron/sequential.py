@@ -43,6 +43,9 @@ class Sequential:
         self.layers[2].Fire()
         self.layers[2].pushOutput()
 
+        self.layers[3].setInput()
+        
+
         # for l in self.layers[1:]:
         #     l.setInput()
         #     l.Fire()
