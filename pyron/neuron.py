@@ -18,14 +18,15 @@ class Neuron:
     def Pot(self):
         # print(self.input_)
         # print(self.weights)
-        self.pot = np.squeeze((self.weights * self.input_) + self.bias)
+        self.pot = np.squeeze((self.input_ * self.weights) + self.bias)
         return self.pot
 
     def Fire(self):
         if self.state:
             pot = self.Pot()
             if self.actFn.lower() == "relu":
-                self.fire = [k if k > 0 else 0 for k in pot]
+                pot[pot < 0] = 0
+                self.fire = pot
             elif self.actFn.lower() == "sigmoid":
                 self.fire = 1 / (1 + np.exp(-pot))
             elif self.actFn.lower() == "linear":

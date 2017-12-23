@@ -24,6 +24,10 @@ class Layer:
         for n in self.neurons:
             n.Fire()
 
+    def Pot(self):
+        for n in self.neurons:
+            n.Pot()
+
     def setInput(self , x = []):
         if len(x) != 0:
             self.input_ = x
